@@ -29,19 +29,48 @@ def loadData():
 
 def moveCrates(movement):
     for move in movement:
-        print(move)
-        stFrom = move[1]-1
-        print(f'move {move[0]}')
-        print(f'stFrom {stFrom}')
-        print(f'length {storage[stFrom]}')
-        indexAmount = len(storage[stFrom])-(move[0])
-        crane = storage[stFrom].range(indexAmount)      # 'list' object has no attribute 'range'
-        print(storage[stFrom])
-        print(crane)
+        #print(move)
+        stFrom = move[1]-1                                  # starts counting at 1 --> -1 so its the same as index
+        stTo = move[2]-1                                    # starts counting at 1 --> -1 so its the same as index
+        indexAmount = len(storage[stFrom])-move[0]
+        #print(f'stFrom {stFrom}')
+        #print(f'Storage FROM before {storage[stFrom]}')
+        crane = storage[stFrom][indexAmount:]               # load crane
+        storage[stFrom] = storage[stFrom][:indexAmount]     # leave rest on storage
+        #print(f'Crane Loaded {crane}')
+        #print(f'Storage FROM after {storage[stFrom]}')
+        #print(f'Storage TO before {storage[stTo]}')
+        for unit in reversed(crane):
+            storage[stTo].append(unit)
+        #print(f'Storage TO after {storage[stTo]}')
 
+    for storageUnit in storage:
+        print(f'Part 1 {storageUnit[len(storageUnit) - 1]}')
+
+
+def moveCrates2(movement):
+    for move in movement:
+        print(move)
+        stFrom = move[1]-1                                  # starts counting at 1 --> -1 so its the same as index
+        stTo = move[2]-1                                    # starts counting at 1 --> -1 so its the same as index
+        indexAmount = len(storage[stFrom])-move[0]
+        print(f'stFrom {stFrom}')
+        print(f'Storage FROM before {storage[stFrom]}')
+        crane = storage[stFrom][indexAmount:]               # load crane
+        storage[stFrom] = storage[stFrom][:indexAmount]     # leave rest on storage
+        print(f'Crane Loaded {crane}')
+        print(f'Storage FROM after {storage[stFrom]}')
+        print(f'Storage TO before {storage[stTo]}')
+        for unit in crane:
+            storage[stTo].append(unit)
+        print(f'Storage TO after {storage[stTo]}')
+
+    for storageUnit in storage:
+        print(f'Part 2 {storageUnit[len(storageUnit) - 1]}')
 
 if __name__ == '__main__':
     # Part 1
-    moveCrates(loadData())
+    # moveCrates(loadData())
 
     # Part 2
+    moveCrates2(loadData())
