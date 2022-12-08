@@ -1,30 +1,51 @@
 # Structure of a node in the tree
-    # Name     - Name of the Node
-    # Type     - DIR; FILE
-    # Size     - File --> Size Value
-    # Value    - DIRECTORY --> List;
-    # Parent   - Object of the Parent
+# Name     - Name of the Node
+# Type     - DIR; FILE
+# Value    - DIRECTORY --> List; FILE --> Size Value
+# Parent   - Object of the Parent
 class Node:
     name = ''
     typ = ''
+    size = 0
     value = ''
     parent = None
 
-    def __init__(self, name, typ, value, parent):
+    def __init__(self, name, typ, size, value, parent):
         self.name = name
         self.typ = typ
+        self.size = size
         self.value = value
         self.parent = parent
+
+
+def printNode(node):
+    if node.typ == 'DIR':
+        print(f'- \'{node.name}\' (Type \'{node.typ}\', Size = {node.size})')
+        for subitem in node.value:
+            i = countParentNodes(subitem, 0)
+            while i > 0:
+                print("  ", end='')
+                i = i - 1
+            printNode(subitem)
+    else:
+        print(f'- \'{node.name}\' (Type \'{node.typ}\', Size = {node.size})')
+
+
+def countParentNodes(node, parentCtr):
+    if node.parent == None:
+        return parentCtr
+    else:
+        parentCtr = parentCtr + 1
+        return countParentNodes(node.parent, parentCtr)
+
 
 def parseConsole(console, root, currentNode):
     currentPosConsole = 0
     while currentPosConsole < len(console):
-        print(f'line {console[currentPosConsole]} consolePos {currentPosConsole}')
-
         if console[currentPosConsole] == '$ ls':
-            res = ls(console,currentPosConsole, currentNode)
+            res = ls(console, currentPosConsole, currentNode)
             currentPosConsole = res[0]
-            currentNode=res[1]
+            currentNode = res[1]
         elif console[currentPosConsole] == '$ cd /':
             currentNode = root
             currentPosConsole = currentPosConsole + 1
@@ -36,22 +57,24 @@ def parseConsole(console, root, currentNode):
         else:
             currentNode = cd_in(console[currentPosConsole][5:], currentNode)
             currentPosConsole = currentPosConsole + 1
-    return None
+    return root
 
-def ls(console,currentPosConsole, currentNode):
+
+def ls(console, currentPosConsole, currentNode):
     currentPosConsole = currentPosConsole + 1
     while currentPosConsole < len(console):
         line = console[currentPosConsole]
-        print(line)
         if console[currentPosConsole].startswith('$'):
             return [currentPosConsole, currentNode]
         elif line.startswith('dir '):
-            currentNode.value.append(Node(line[4:], 'DIR', [], currentNode))
+            currentNode.value.append(Node(line[4:], 'DIR', 0, [], currentNode))
             currentPosConsole = currentPosConsole + 1
         else:
             data = line.split(' ')
-            currentNode.value.append(Node(data[1], 'FILE', int(data[0]), currentNode))
+            currentNode.value.append(Node(data[1], 'FILE', int(data[0]), None, currentNode))
             currentPosConsole = currentPosConsole + 1
+    return [currentPosConsole, currentNode]
+
 
 def cd_in(name, currentNode):
     for dir in currentNode.value:
@@ -61,15 +84,41 @@ def cd_in(name, currentNode):
 
 def loadData():
     data = []
-    with open('bspData.txt', 'r') as f:
+    with open('Data.txt', 'r') as f:
         for line in f:
             data.append(line.replace('\n', ''))
     return data
 
+
+def p1(node):
+    global totalSum
+    if node.typ == 'DIR':
+        for subitem in node.value:
+            if subitem.typ == 'DIR':
+                if subitem.size < 100000:
+                    print(f'Node under 100k {subitem.name} {subitem.size}')
+                    totalSum = totalSum + subitem.size
+                p1(subitem)
+
+
+def sumDir(filesystem):
+    for node in filesystem.value:
+        if node.typ == 'DIR':
+            sumDir(node)
+        filesystem.size = filesystem.size + node.size
+
+
 if __name__ == '__main__':
     console = loadData()
 
-    filesystem = Node('/', 'DIR', [], None)
-    parseConsole(console, filesystem, filesystem)
+    filesystem = Node('/', 'DIR', 0, [], None)
+    filesystem = parseConsole(console, filesystem, filesystem)
+    sumDir(filesystem)
+    #printNode(filesystem)
+
+    # Part 1
+    totalSum = 0
+    p1(filesystem)
+    print(totalSum)
 
     # Part 2
