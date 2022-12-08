@@ -1,78 +1,68 @@
 # Structure of a node in the tree
-# Name     - Name of the Node
-# Type     - DIR; FILE
-# Value    - DIRECTORY --> List; File --> Size Value
-# Parent   - Object of the Parent
+    # Name     - Name of the Node
+    # Type     - DIR; FILE
+    # Value    - DIRECTORY --> List; File --> Size Value
+    # Parent   - Object of the Parent
+class Node:
+    name = ''
+    type = ''
+    value = ''
+    parent = None
 
-filesys = {'NAME': '/',
-           'TYPE': 'DIR',
-           'VALUE': [],
-           'PARENT': None
-           }
-currentPosFilesys = filesys
+    def __init__(self, name, type, value, parent):
+        self.name = name
+        self.type = type
+        self.value = value
+        self.parent = parent
 
-console = []
-currentPosConsole = 0
+def parseConsole(console, filesystem):
+    currentPosConsole = 0
+    while currentPosConsole < len(console):
+        print(f'line {console[currentPosConsole]} consolePos {currentPosConsole}')
+
+        if console[currentPosConsole] == '$ ls':
+            res = ls(console,currentPosConsole,filesystem, currentNode)
+            currentPosConsole = res[0]
+            filesystem=res[1]
+        elif console[currentPosConsole] == '$ cd /':
+            currentNode = root
+            currentPosConsole = currentPosConsole + 1
+        elif console[currentPosConsole] == '$ cd ..':
+            pass
+            #cd_out()
+        else:
+            #res = cd_in(console[currentPosConsole][5:], currentPosConsole, currentPosFilesys)
+            currentPosConsole = res[0]
+            currentPosFilesys = res[1]
+    return None
+
+def ls(console,currentPosConsole,filesystem, currentNode):
+    while currentPosConsole < len(console):
+        line = console[currentPosConsole]
+        if line.startswith('$'):
+            return [currentPosConsole, filesystem]
+        elif line.startswith('dir '):
+            currentNode.value.append(Node(line[4:], 'DIR', [], currentNode))
+            currentPosConsole = currentPosConsole + 1
+        else:
+            data = line.split(' ')
+            currentNode.value.append(data[1], 'FILE', int(data[0]), currentNode)
+            currentPosConsole = currentPosConsole + 1
 
 
 def loadData():
+    data = []
     with open('bspData.txt', 'r') as f:
         for line in f:
-            console.append(line.replace('\n', ''))
-    return console
-
-
-def parseConsole():
-    while currentPosConsole < len(console):
-        print(console[currentPosConsole])
-
-        if console[currentPosConsole] == '$ ls':
-            ls()
-        elif console[currentPosConsole] == '$ cd /':
-            cd_root()
-        elif console[currentPosConsole] == '$ cd ..':
-            cd_out()
-        else:
-            cd_in(console[currentPosConsole][5:])
-
-
-def cd_in(name):
-    #nonlocal currentPosConsole
-    #nonlocal currentPosFilesys
-    currentPosConsole = currentPosConsole + 1
-
-    if currentPosFilesys['NAME'] == name:
-        print(f'Name: {name} Already in directory {currentPosFilesys}')
-        return
-
-    for dir in currentPosFilesys['VALUE']:
-        if dir['TYPE'] == 'FILE':
-            continue
-        else:
-            if dir['NAME'] == name:
-                currentPosFilesys = dir
-                break
-
-def cd_out():
-    pass
-
-
-def cd_root():
-    pass
-
-
-def ls():
-    pass
-
-
-def addNode():
-    pass
-
+            data.append(line.replace('\n', ''))
+    return data
 
 if __name__ == '__main__':
-    # Part 1
-    loadData()
+    console = loadData()
 
-    print(filesys)
+    root = Node('/', 'DIR', [], None)
+    currentNode = root
+
+    parseConsole(console, root)
 
     # Part 2
