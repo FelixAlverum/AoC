@@ -125,7 +125,7 @@ if __name__ == '__main__':
     filesystem = Node('/', 'DIR', 0, [], None)
     filesystem = parseConsole(console, filesystem, filesystem)
     sumDir(filesystem)
-    #printNode(filesystem)
+    printNode(filesystem)
 
     # Part 1
     totalSum = 0
