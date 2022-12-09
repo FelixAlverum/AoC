@@ -96,10 +96,21 @@ def p1(node):
         for subitem in node.value:
             if subitem.typ == 'DIR':
                 if subitem.size < 100000:
-                    print(f'Node under 100k {subitem.name} {subitem.size}')
+                    # print(f'Node under 100k {subitem.name} {subitem.size}')
                     totalSum = totalSum + subitem.size
                 p1(subitem)
 
+
+def p2(node):
+    global delSize
+    global delDirSize
+
+    if node.typ == 'DIR':
+        for subitem in node.value:
+            if (subitem.typ == 'DIR') & (subitem.size > delSize) & (subitem.size < delDirSize):
+                print(f'subitem.size {subitem.size} > delSize {delSize} --> {subitem.size > delSize}')
+                delDirSize = subitem.size
+            p2(subitem)
 
 def sumDir(filesystem):
     for node in filesystem.value:
@@ -122,3 +133,10 @@ if __name__ == '__main__':
     print(totalSum)
 
     # Part 2
+    # Size of Total Space       70000000
+    # Size of Update            30000000
+    freeSpace = 70000000 - filesystem.size
+    delSize = 30000000 - freeSpace
+    delDirSize = 70000000
+    p2(filesystem)
+    print(delDirSize)
