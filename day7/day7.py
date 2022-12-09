@@ -108,7 +108,7 @@ def p2(node):
     if node.typ == 'DIR':
         for subitem in node.value:
             if (subitem.typ == 'DIR') & (subitem.size > delSize) & (subitem.size < delDirSize):
-                print(f'subitem.size {subitem.size} > delSize {delSize} --> {subitem.size > delSize}')
+                #print(f'subitem.size {subitem.size} > delSize {delSize} --> {subitem.size > delSize}')
                 delDirSize = subitem.size
             p2(subitem)
 
