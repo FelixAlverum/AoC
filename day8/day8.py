@@ -81,14 +81,14 @@ def calculateScenicScore(grid):
             tree = grid[row][col]
             distance = 0
 
-            print(f'tree {tree} row {row} col {col}')
+            #print(f'tree {tree} row {row} col {col}')
             # look from top
             treesBetweenEdge = reversed(range(0, row, 1))
             for compareRow in treesBetweenEdge:
                 distance = distance + 1
                 if (tree < grid[compareRow][col]) | (tree == grid[compareRow][col] | (compareRow == 0)):
                     break
-            print(f'(up) {distance}', end=' * ')
+            #print(f'(up) {distance}', end=' * ')
             scenicView = scenicView * distance
             distance = 0
 
@@ -98,29 +98,29 @@ def calculateScenicScore(grid):
                 distance = distance + 1
                 if (tree < grid[compareRow][col]) | (tree == grid[compareRow][col] | (compareRow == len(grid)-1)):
                     break
-            print(f'(down) {distance}', end=' * ')
+            #print(f'(down) {distance}', end=' * ')
             scenicView = scenicView * distance
             distance = 0
 
             treesBetweenEdge = reversed(range(0, col, 1))
-            # look from left TODO Fehler ist um 1 zu groß
+            # look from left
             for compareCol in treesBetweenEdge:
                 distance = distance + 1
                 if (grid[row][col] < grid[row][compareCol]) | (grid[row][col] == grid[row][compareCol] | (compareCol == 0)):
                     break
-            print(f'(left) {distance}', end=' * ')
+            #print(f'(left) {distance}', end=' * ')
             scenicView = scenicView * distance
             distance = 0
 
-            # look from right #TODO Fehler ist um 1 zu groß
+            # look from right
             treesBetweenEdge = range(col+1, len(grid[row]), 1)
             for compareCol in treesBetweenEdge:
                 distance = distance + 1
                 if (grid[row][col] < grid[row][compareCol]) | (grid[row][col] == grid[row][compareCol] | (compareCol == len(grid[row])-1)):
                     break
-            print(f'(right) {distance}', end=' = ')
+            #print(f'(right) {distance}', end=' = ')
             scenicView = scenicView * distance
-            print(scenicView)
+            #print(scenicView)
 
             if scenicView > maxScenicView:
                 maxScenicView = scenicView
@@ -129,10 +129,10 @@ def calculateScenicScore(grid):
 
 if __name__ == '__main__':
     grid = loadData()
-    for i in grid:
-        for j in i:
-            print(f'{j}', end=' ')
-        print('')
+    #for i in grid:
+    #    for j in i:
+    #        print(f'{j}', end=' ')
+    #    print('')
 
     # Part 1
     countVisibleTrees(grid)
