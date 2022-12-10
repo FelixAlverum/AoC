@@ -3,7 +3,7 @@ import math
 
 def loadData():
     movement = []
-    with open('Data.txt', 'r') as f:
+    with open('bspData.txt', 'r') as f:
         for line in f:
             movement.append(line.replace('\n', '').split(' '))
     return movement
@@ -147,7 +147,7 @@ def printCoords(cords):
     for cord in cords:
         grid[cord[0]+offsetRow][cord[1]+offsetCol] = '#'
 
-    for row in range(0,offsetRow*2,1):
+    for row in reversed(range(0,offsetRow*2,1)):
         for col in range(0,offsetCol*2,1):
             print(grid[row][col] , end= '')
         print()
@@ -176,4 +176,4 @@ if __name__ == '__main__':
             uniqueCords.append(cord)
     print(len(uniqueCords))
 
-    #printCoords(t9) # für Testdaten
+    printCoords(t9) # für Testdaten
