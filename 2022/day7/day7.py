@@ -84,7 +84,7 @@ def cd_in(name, currentNode):
 
 def loadData():
     data = []
-    with open('Data.txt', 'r') as f:
+    with open('data.txt', 'r') as f:
         for line in f:
             data.append(line.replace('\n', ''))
     return data

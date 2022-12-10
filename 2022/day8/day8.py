@@ -1,6 +1,6 @@
 def loadData():
     data = []
-    with open('Data.txt', 'r') as f:
+    with open('data.txt', 'r') as f:
         i = 0
         for line in f:
             data.append([])

@@ -1,6 +1,6 @@
 def loadData():
     instructions = []
-    with open('Data.txt', 'r') as f:
+    with open('data.txt', 'r') as f:
         for line in f:
             if line == 'noop':
                 instructions.append([line.replace('\n', '')])         #noop
