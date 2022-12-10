@@ -34,7 +34,7 @@ def evaluateCycle(cycle, signalStrength, registerValue):
     return signalStrength
 
 def drawSprite(instructions):
-    cycle = 0
+    cycle = -1
     registerValue = 1
     grid = []
     spritePosition = [0, 1, 2]
@@ -46,7 +46,6 @@ def drawSprite(instructions):
             grid[row].append('.')
 
     # Add Pixels ('#') on monitor
-    grid[0][0] = '#'                # first element is not reached by this algorithm
     for op in instructions:
         if op[0] == 'noop':
             cycle = cycle + 1
@@ -63,7 +62,7 @@ def drawSprite(instructions):
 
             # move sprite
             registerValue = registerValue + int(op[1])
-            spritePosition = [registerValue , registerValue + 1, registerValue + 2]
+            spritePosition = [registerValue-1, registerValue + 0, registerValue + 1]
 
     # Print Monitor
     for row in range(0,6,1):
