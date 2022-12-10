@@ -3,7 +3,7 @@ import math
 
 def loadData():
     movement = []
-    with open('Data.txt', 'r') as f:
+    with open('bspData.txt', 'r') as f:
         for line in f:
             movement.append(line.replace('\n', '').split(' '))
     return movement
@@ -121,4 +121,4 @@ if __name__ == '__main__':
     # Part 2
     print(f'P2: {getUniqueCords(t9)}')
 
-    #printCoords(t9) # für Testdaten
+    printCoords(t9) # für Testdaten
