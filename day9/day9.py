@@ -3,69 +3,10 @@ import math
 
 def loadData():
     movement = []
-    with open('bspData.txt', 'r') as f:
+    with open('Data.txt', 'r') as f:
         for line in f:
             movement.append(line.replace('\n', '').split(' '))
     return movement
-
-def moveRope(movement):
-    tailPath = [[0,0]] # unique coordinates from tail
-    head = [0, 0]      # row = 0; col = 0
-    tail = [0, 0]      # row = 0; col = 0
-
-    for move in movement:
-        if (move[0] == 'U') | (move[0] == 'D'):
-            for i in range(0, int(move[1]), 1):
-                if move[0] == 'U':          #up
-                    head[0] = head[0] + 1
-                else:                       #down
-                    head[0] = head[0] - 1
-
-                # print(f'delta row {head[0]} -> {tail[0]} = {int(math.dist((head[0],), (tail[0],)))}\n'
-                #       f'delta col {head[1]} -> {tail[1]} = {int(math.dist((head[1],), (tail[1],)))}')
-                if (int(math.dist((head[0],), (tail[0],))) < 2) & (int(math.dist((head[1],), (tail[1],))) < 2):
-                    continue  # Do nothing head still touches tail
-                print(f'{i+1}. move {move}')
-
-                if move[0] == 'U':          #up
-                    tail[0] = tail[0] + 1
-                else:                       #down
-                    tail[0] = tail[0] - 1
-
-                if head[1] > tail[1]:
-                    tail[1] = tail[1] + 1   # tail go diagonal right
-                elif head[1] < tail[1]:
-                    tail[1] = tail[1] - 1   # tail go diagonal left
-
-                if [tail[0], tail[1]] not in tailPath:
-                    tailPath.append([tail[0], tail[1]])
-
-        if (move[0] == 'L') | (move[0] == 'R'):
-            for i in range(0, int(move[1]), 1):
-                if move[0] == 'L':          #left
-                    head[1] = head[1] - 1
-                else:                       #right
-                    head[1] = head[1] + 1
-
-                # print(f'delta row {head[0]} -> {tail[0]} = {int(math.dist((head[0],), (tail[0],)))}\n'
-                #       f'delta col {head[1]} -> {tail[1]} = {int(math.dist((head[1],), (tail[1],)))}')
-                if (int(math.dist((head[0],), (tail[0],))) < 2) & (int(math.dist((head[1],), (tail[1],))) < 2):
-                    continue  # Do nothing head still touches tail
-                print(f'{i+1}. move {move}')
-
-                if move[0] == 'L':          #left
-                    tail[1] = tail[1] - 1
-                else:                       #right
-                    tail[1] = tail[1] + 1
-
-                if head[0] > tail[0]:
-                    tail[0] = tail[0] + 1  # tail go diagonal up
-                elif head[0] < tail[0]:
-                    tail[0] = tail[0] - 1  # tail go diagonal down
-
-                if [tail[0], tail[1]] not in tailPath:
-                    tailPath.append([tail[0], tail[1]])
-    print(len(tailPath))
 
 def getMovementCoordinates(movement):
     headPath = [[0,0]] # coordinates from tail
@@ -152,13 +93,17 @@ def printCoords(cords):
             print(grid[row][col] , end= '')
         print()
 
+def getUniqueCords(cords):
+    uniqueCords = []
+    for cord in cords:
+        if cord not in uniqueCords:
+            uniqueCords.append(cord)
+    return len(uniqueCords)
+
+
 if __name__ == '__main__':
     movement = loadData()
 
-    # Part 1
-    moveRope(movement)
-
-    # Part 2
     head = getMovementCoordinates(movement)
     t1 = moveRopeByCoordinates(head)
     t2 = moveRopeByCoordinates(t1)
@@ -170,10 +115,10 @@ if __name__ == '__main__':
     t8 = moveRopeByCoordinates(t7)
     t9 = moveRopeByCoordinates(t8)
 
-    uniqueCords = []
-    for cord in t9:
-        if cord not in uniqueCords:
-            uniqueCords.append(cord)
-    print(len(uniqueCords))
+    # Part 1
+    print(f'P1: {getUniqueCords(t1)}')
 
-    printCoords(t9) # für Testdaten
+    # Part 2
+    print(f'P2: {getUniqueCords(t9)}')
+
+    #printCoords(t9) # für Testdaten
