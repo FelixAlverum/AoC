@@ -1,8 +1,3 @@
-def loadData():
-    with open('data.txt', 'r') as f:
-        for i, line in enumerate(f):
-            line = line.replace('\n', '')
-
 def takeStairs(data):
     floor = 0
 
