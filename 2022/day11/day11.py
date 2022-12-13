@@ -22,16 +22,22 @@ class monkey:
             if self.operation == '+':
                 stresslevel += self.worryMultiplier
             elif self.operation == '*':
-                stresslevel *= self.worryMultiplier
-            elif self.operation == 'old':
-                stresslevel *= stresslevel
+                if self.worryMultiplier == 'old':
+                    stresslevel *= stresslevel
+                else:
+                    stresslevel *= self.worryMultiplier
 
-            if stresslevel % self.divisior == 0:
+            if (stresslevel % self.divisior) == 0:
                 self.trueApe.items.append(item)
             else:
-                self.falseApe.items.appemd(item)
+                self.falseApe.items.append(item)
         self.items = []
-        return [self.trueApe, self.falseApe]
+
+    def printMonkey(self, monkeyNr):
+        if len(self.items) == 0:
+            print(f'Monkey {monkeyNr}. Nah its empty')
+        else:
+            print(f'Monkey {monkeyNr}. items {self.items}')
 
 
 if __name__ == '__main__':
@@ -56,5 +62,9 @@ if __name__ == '__main__':
     monkeys = [monkey0, monkey1, monkey2, monkey3, monkey4, monkey5, monkey6, monkey7]
 
     for i in range(0,20,1):
-        for monkey in monkeys:
+        print(f'Round {i+1}')
+        for i, monkey in enumerate(monkeys):
+            monkey.printMonkey(i)
             monkey.option()
+            monkey.printMonkey(i)
+        print()
