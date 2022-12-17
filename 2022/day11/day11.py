@@ -1,5 +1,6 @@
 import math
 
+
 # inspect --> relive --> pass to monkey
 
 
@@ -24,8 +25,9 @@ class monkey:
 
     def option(self):
         for stresslevel in self.items:
-            item = stresslevel
-            #inspect item
+            self.inspectedItemsCtr += 1
+
+            # inspect item
             if self.operation == '+':
                 stresslevel += self.worryMultiplier
             elif self.operation == '*':
@@ -34,12 +36,42 @@ class monkey:
                 else:
                     stresslevel *= self.worryMultiplier
 
-            self.inspectedItemsCtr = self.inspectedItemsCtr + 1
-            stresslevel = math.floor(stresslevel / 3)
+            # relive
+            stresslevel = stresslevel // 3
+
+            # pass item
             if stresslevel % self.divisior == 0:
-                self.trueApe.items.append(item)
+                self.trueApe.items.append(stresslevel)
             else:
-                self.falseApe.items.append(item)
+                self.falseApe.items.append(stresslevel)
+        self.items = []
+
+    def option2(self):
+        #divisors 2; 3; 5; 7; 11, 13, 17, 19
+        for stresslevel in self.items:
+            self.inspectedItemsCtr += 1
+
+            # inspect item
+            if self.operation == '+':
+                stresslevel += self.worryMultiplier
+            elif self.operation == '*':
+                if self.worryMultiplier == 'old':
+                    stresslevel *= stresslevel
+                else:
+                    stresslevel *= self.worryMultiplier
+
+            if not stresslevel % (2*3*5*7*11*13*17*19) == 0:
+                stresslevel = stresslevel % (2*3*5*7*11*13*17*19)
+
+            #For Test
+            #if not stresslevel % (23*19*13*17) == 0:
+            #    stresslevel = stresslevel % (23*19*13*17)
+
+            # pass item
+            if stresslevel % self.divisior == 0:
+                self.trueApe.items.append(stresslevel)
+            else:
+                self.falseApe.items.append(stresslevel)
         self.items = []
 
     def printMonkey(self, monkeyNr):
@@ -70,7 +102,7 @@ if __name__ == '__main__':
 
     monkeys = [monkey0, monkey1, monkey2, monkey3, monkey4, monkey5, monkey6, monkey7]
 
-    #Testdata
+    """# Testdata
 
     monkey0 = monkey([79, 98], '*', 19, 23)
     monkey1 = monkey([54, 65, 75, 74], '+', 6, 19)
@@ -86,9 +118,8 @@ if __name__ == '__main__':
 
     #########################
 
-
-
-    for i in range(1,20,1):
+    #Part 1
+    for i in range(0,20,1):
         print(f'Round {i+1}')
         for i, monkey in enumerate(monkeys):
             monkey.printMonkey(i)
@@ -100,4 +131,20 @@ if __name__ == '__main__':
     for m in monkeys:
         monkeyBusiness.append(m.inspectedItemsCtr)
     monkeyBusiness.sort(reverse=True)
-    print(f'monkeybusiness {monkeyBusiness}, {monkeyBusiness[0]} * {monkeyBusiness[1]} = {monkeyBusiness[0] *monkeyBusiness[1]}')
+    print(f'monkeybusiness {monkeyBusiness} --> {monkeyBusiness[0]} * {monkeyBusiness[1]} = {monkeyBusiness[0] *monkeyBusiness[1]}')
+    """
+    # Part 2
+    for i in range(1, 10001, 1):
+        for monkey in monkeys:
+            monkey.option2()
+        if (i == 1) | (i == 20) | (i%1000 == 0):
+            print(f'== After Round {i} ==')
+            for index, m in enumerate(monkeys):
+                print(f' monkey {index} has inspected items {m.inspectedItemsCtr} times')
+            print()
+
+    monkeyBusiness = []
+    for m in monkeys:
+        monkeyBusiness.append(m.inspectedItemsCtr)
+    monkeyBusiness.sort(reverse=True)
+    print(f'monkeybusiness {monkeyBusiness} --> {monkeyBusiness[0]} * {monkeyBusiness[1]} = {monkeyBusiness[0] * monkeyBusiness[1]}')
